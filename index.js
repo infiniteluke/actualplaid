@@ -85,7 +85,7 @@ const start = async () => {
 const printSyncedAccounts = () => {
   const data = config.get("actualSync");
   if (!data) {
-    return;
+    console.log('No syncing data found')
   }
   console.table(
     Object.values(data).map((account) => ({
