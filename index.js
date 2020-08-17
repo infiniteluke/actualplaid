@@ -265,7 +265,7 @@ module.exports = async (command, flags) => {
     }
   } else if (command === "ls") {
     printSyncedAccounts();
-    process.exit(1);
+    process.exit();
   }
 };
 
