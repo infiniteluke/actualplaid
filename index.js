@@ -12,21 +12,6 @@ const Conf = require("conf");
 const config = new Conf();
 let syncingData;
 
-fastify.register(require("fastify-static"), {
-  root: path.join(__dirname, "public"),
-  prefix: "/public/",
-});
-
-const start = async () => {
-  try {
-    await fastify.listen(APP_PORT);
-    // fastify.log.info(`server listening on ${fastify.server.address().port}`);
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-};
-
 const ACTUAL_BUDGET_ID = process.env.ACTUAL_BUDGET_ID;
 
 const APP_PORT = process.env.APP_PORT || 3000;
@@ -36,6 +21,20 @@ const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_ENV = process.env.PLAID_ENV || "development";
 var PLAID_PRODUCTS = (process.env.PLAID_PRODUCTS || "transactions").split(",");
 var PLAID_COUNTRY_CODES = (process.env.PLAID_COUNTRY_CODES, "US").split(",");
+
+if (!PLAID_CLIENT_ID) {
+  console.log(`Please provide a PLAID_CLIENT_ID env variable from the ${terminalLink(
+    "Plaid Development Dashboard",
+    "https://dashboard.plaid.com/overview/development"
+  )}`)
+}
+
+if (!PLAID_SECRET) {
+  console.log(`Please provide a PLAID_SECRET env variable from the ${terminalLink(
+    "Plaid Development Dashboard",
+    "https://dashboard.plaid.com/overview/development"
+  )}`)
+}
 
 var client = new plaid.Client({
   clientID: PLAID_CLIENT_ID,
@@ -49,8 +48,8 @@ var client = new plaid.Client({
 const getTransactions = util.promisify(client.getTransactions);
 const getAccounts = util.promisify(client.getAccounts);
 
-const prettyPrintResponse = (response) => {
-  console.log(util.inspect(response, { colors: true, depth: 4 }));
+const prettyPrint = (item) => {
+  console.log(util.inspect(item, { colors: true, depth: 4 }));
 };
 
 const transactionMapper = (accountId) => (transaction) => ({
@@ -66,17 +65,35 @@ const transactionMapper = (accountId) => (transaction) => ({
   cleared: !transaction.pending,
 });
 
+fastify.register(require("fastify-static"), {
+  root: path.join(__dirname, "public"),
+  prefix: "/public/",
+});
+
+const start = async () => {
+  try {
+    await fastify.listen(APP_PORT);
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+};
+
 module.exports = async (command, flags) => {
   if (!command) {
     console.log('Try "actualplaid --help"');
     process.exit();
   }
   try {
+    if (!ACTUAL_BUDGET_ID) {
+      console.log(`Please provide a ACTUAL_BUDGET_ID env variable from Settings --> Advanced in the Actual Budget app`)
+      process.exit(1);
+    }
     await actual.init();
     await actual.loadBudget(ACTUAL_BUDGET_ID);
     syncingData = config.get(`actualSync`) || {};
   } catch (e) {
-    console.error(`Could not load Actual: ${e.message}`);
+    console.error(`Actual Budget Error: ${e.message}`);
     process.exit(1);
   }
   if (command === "config") {
@@ -122,7 +139,7 @@ module.exports = async (command, flags) => {
         console.log("Import completed");
         process.exit();
       } catch (e) {
-        prettyPrintResponse(e);
+        prettyPrint(e);
         process.exit(1);
       }
     } else {
@@ -248,8 +265,8 @@ fastify.post("/create_link_token", (request, reply) => {
   };
   client.createLinkToken(configs, function (error, { link_token }) {
     if (error != null) {
-      prettyPrintResponse(error);
-      return;
+      prettyPrint(error);
+      process.exit(1);
     }
     reply.send({ link_token });
   });
@@ -262,22 +279,22 @@ fastify.post("/get_access_token", (request, reply) => {
     tokenResponse
   ) {
     if (error != null) {
-      prettyPrintResponse(error);
-      return;
+      prettyPrint(error);
+      process.exit(1);
     }
     client.getAccounts(
       tokenResponse.access_token,
       async (error, { accounts, item }) => {
         if (error != null) {
-          prettyPrintResponse(error);
-          return;
+          prettyPrint(error);
+          process.exit(1);
         }
         client.getInstitutionById(
           item.institution_id,
           (error, { institution }) => {
             if (error != null) {
-              prettyPrintResponse(error);
-              return;
+              prettyPrint(error);
+              process.exit(1);
             }
             accounts.forEach((account) => {
               config.set(`plaidAccounts.${account.account_id}`, {
