@@ -79,6 +79,19 @@ const start = async () => {
   }
 };
 
+const printSyncedAccounts = () => {
+  console.table(
+    Object.values(config.get("actualSync")).map((account) => ({
+      "Actual Account": account.actualName,
+      "Actual Type": account.actualType,
+      "Plaid Bank": account.plaidBankName,
+      "Plaid Account": account.plaidAccount.name,
+      "Plaid Type": `${account.plaidAccount.subtype}/${account.plaidAccount.type}`,
+      "Plaid Account #": account.plaidAccount.mask,
+    }))
+  );
+}
+
 module.exports = async (command, flags) => {
   if (!command) {
     console.log('Try "actualplaid --help"');
@@ -231,16 +244,7 @@ module.exports = async (command, flags) => {
             plaidBankName: plaidAccount.plaidBankName,
           });
         }
-        console.table(
-          Object.values(config.get("actualSync")).map((account) => ({
-            "Actual Account": account.actualName,
-            "Actual Type": account.actualType,
-            "Plaid Bank": account.plaidBankName,
-            "Plaid Account": account.plaidAccount.name,
-            "Plaid Type": `${account.plaidAccount.subtype}/${account.plaidAccount.type}`,
-            "Plaid Account #": account.plaidAccount.mask,
-          }))
-        );
+        printSyncedAccounts();
       }
       console.log(
         `Setup completed sucessfully. Run \`actualplaid import\` to sync your setup banks with their respective actual accounts`
@@ -250,6 +254,9 @@ module.exports = async (command, flags) => {
       console.error(`Setup was not run`);
       process.exit();
     }
+  } else if (command === "ls") {
+    printSyncedAccounts()
+    process.exit(1)
   }
 };
 
