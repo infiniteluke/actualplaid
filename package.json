@@ -22,5 +22,10 @@
   },
   "engines": {
     "node" : ">=10"
-  }
+  },
+  "files": [
+    "cli.js",
+    "index.js",
+    "public/"
+  ]
 }
