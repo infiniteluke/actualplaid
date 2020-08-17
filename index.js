@@ -152,7 +152,8 @@ module.exports = async (command, flags) => {
             transactionsResponse.transactions
               .filter(
                 (transaction) =>
-                  transaction.account_id === account.plaidAccount.account_id
+                  transaction.account_id === account.plaidAccount.account_id &&
+                  !(!flags.includePending && transaction.pending)
               )
               .map(transactionMapper(actualId))
           );
