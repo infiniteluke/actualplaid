@@ -134,7 +134,7 @@ module.exports = async (command, flags) => {
             new Date(
               flags["since"] ||
                 account.lastImport ||
-                dateFns.subMonths(new Date(), 1)
+                dateFns.startOfMonth(new Date())
             ),
             "yyyy-MM-dd"
           );
