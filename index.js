@@ -55,8 +55,7 @@ const prettyPrint = (item) => {
 const transactionMapper = (accountId) => (transaction) => ({
   account_id: accountId,
   date: transaction.date,
-  amount: transaction.amount,
-  amount: transaction.amount,
+  amount: transaction.amount * 100,
   payee: transaction.merchant_name || transaction.name,
   imported_payee: transaction.merchant_name || transaction.name,
   imported_id: transaction.transaction_id,
