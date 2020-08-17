@@ -21,7 +21,7 @@
     ls               List currently syncing accounts
     import           Sync bank accounts to Actual Budget
 	    --account, -a   The account to import, ex: --account="My Checking"
-	    --since, -s     The start date after which transactions should be imported, format: yyyy-MM-dd, ex: --since=2020-05-28
+	    --since, -s     The start date after which transactions should be imported. Defaults to last import date, format: yyyy-MM-dd, ex: --since=2020-05-28
     config           Print the location of actualplaid the config file
     --version        Print the version of actualplaid being used
 

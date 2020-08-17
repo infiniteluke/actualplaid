@@ -19,5 +19,8 @@
     "meow": "^7.0.1",
     "plaid": "^6.0.0",
     "terminal-link": "^2.1.1"
+  },
+  "engines": {
+    "node" : ">=10"
   }
 }
