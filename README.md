@@ -1,13 +1,14 @@
-## actualplaid
+# actualplaid
 
 ## Setup
 
-- Install actualplaid: `yarn global add actualplaid-cli` or `npm install -g actualplaid-cli`
+- `yarn global add actualplaid-cli` or `npm install -g actualplaid-cli`
 - Create [plaid developer account](https://dashboard.plaid.com/overview/development) and collect client id/secret keys
 - Open Actual Budget desktop app
 - Run `setup`: `ACTUAL_BUDGET_ID=My-Finances-12345 PLAID_CLIENT_ID=my-client-id PLAID_SECRET=my-secret-key actualplaid setup`
+  - Alternatively, export these environment variables before running actualplaid
 - Login to banks you would like to sync
-- Map to accounts in Actual Budget
+- Switch back to CLI and map to accounts in Actual Budget
 - Run `import`: `ACTUAL_BUDGET_ID=My-Finances-12345 PLAID_CLIENT_ID=my-client-id PLAID_SECRET=my-secret-key actualplaid import`
 
 ## Commands
