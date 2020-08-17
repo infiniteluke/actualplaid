@@ -1,6 +1,6 @@
 {
   "name": "actualplaid-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Import transactions from your bank accounts into Actual Budget via Plaid API",
   "main": "cli.js",
   "bin": {
