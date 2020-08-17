@@ -23,17 +23,21 @@ var PLAID_PRODUCTS = (process.env.PLAID_PRODUCTS || "transactions").split(",");
 var PLAID_COUNTRY_CODES = (process.env.PLAID_COUNTRY_CODES, "US").split(",");
 
 if (!PLAID_CLIENT_ID) {
-  console.log(`Please provide a PLAID_CLIENT_ID env variable from the ${terminalLink(
-    "Plaid Development Dashboard",
-    "https://dashboard.plaid.com/overview/development"
-  )}`)
+  console.log(
+    `Please provide a PLAID_CLIENT_ID env variable from the ${terminalLink(
+      "Plaid Development Dashboard",
+      "https://dashboard.plaid.com/overview/development"
+    )}`
+  );
 }
 
 if (!PLAID_SECRET) {
-  console.log(`Please provide a PLAID_SECRET env variable from the ${terminalLink(
-    "Plaid Development Dashboard",
-    "https://dashboard.plaid.com/overview/development"
-  )}`)
+  console.log(
+    `Please provide a PLAID_SECRET env variable from the ${terminalLink(
+      "Plaid Development Dashboard",
+      "https://dashboard.plaid.com/overview/development"
+    )}`
+  );
 }
 
 var client = new plaid.Client({
@@ -89,7 +93,7 @@ const printSyncedAccounts = () => {
       "Plaid Account #": account.plaidAccount.mask,
     }))
   );
-}
+};
 
 module.exports = async (command, flags) => {
   if (!command) {
@@ -98,7 +102,9 @@ module.exports = async (command, flags) => {
   }
   try {
     if (!ACTUAL_BUDGET_ID) {
-      console.log(`Please provide a ACTUAL_BUDGET_ID env variable from Settings --> Advanced in the Actual Budget app`)
+      console.log(
+        `Please provide a ACTUAL_BUDGET_ID env variable from Settings --> Advanced in the Actual Budget app`
+      );
       process.exit(1);
     }
     await actual.init();
@@ -254,8 +260,8 @@ module.exports = async (command, flags) => {
       process.exit();
     }
   } else if (command === "ls") {
-    printSyncedAccounts()
-    process.exit(1)
+    printSyncedAccounts();
+    process.exit(1);
   }
 };
 
