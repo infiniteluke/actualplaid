@@ -83,8 +83,12 @@ const start = async () => {
 };
 
 const printSyncedAccounts = () => {
+  const data = config.get("actualSync");
+  if (!data) {
+    return;
+  }
   console.table(
-    Object.values(config.get("actualSync")).map((account) => ({
+    Object.values(data).map((account) => ({
       "Actual Account": account.actualName,
       "Actual Type": account.actualType,
       "Plaid Bank": account.plaidBankName,
