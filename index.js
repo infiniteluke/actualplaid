@@ -19,7 +19,9 @@ const APP_PORT = process.env.APP_PORT || 3000;
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
 const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_ENV = process.env.PLAID_ENV || "development";
-const PLAID_PRODUCTS = (process.env.PLAID_PRODUCTS || "transactions").split(",");
+const PLAID_PRODUCTS = (process.env.PLAID_PRODUCTS || "transactions").split(
+  ","
+);
 const PLAID_COUNTRY_CODES = (process.env.PLAID_COUNTRY_CODES, "US").split(",");
 
 if (!PLAID_CLIENT_ID) {
@@ -63,9 +65,7 @@ const transactionMapper = (accountId) => (transaction) => ({
   payee: transaction.merchant_name || transaction.name,
   imported_payee: transaction.merchant_name || transaction.name,
   imported_id: transaction.transaction_id,
-  location: transaction.pending,
   pending: transaction.pending,
-  cleared: !transaction.pending,
 });
 
 fastify.register(require("fastify-static"), {
@@ -85,7 +85,7 @@ const start = async () => {
 const printSyncedAccounts = () => {
   const data = config.get("actualSync");
   if (!data) {
-    console.log('No syncing data found')
+    console.log("No syncing data found");
   }
   console.table(
     Object.values(data).map((account) => ({
@@ -279,51 +279,42 @@ fastify.post("/create_link_token", (request, reply) => {
     country_codes: PLAID_COUNTRY_CODES,
     language: "en",
   };
-  client.createLinkToken(configs, function (error, { link_token }) {
+  client.createLinkToken(configs, (error, res) => {
     if (error != null) {
       prettyPrint(error);
       process.exit(1);
     }
-    reply.send({ link_token });
+    reply.send({ link_token: res.link_token });
   });
 });
 
 fastify.post("/get_access_token", (request, reply) => {
   const body = JSON.parse(request.body);
-  client.exchangePublicToken(body.public_token, function (
-    error,
-    tokenResponse
-  ) {
+  client.exchangePublicToken(body.public_token, (error, tokenResponse) => {
     if (error != null) {
       prettyPrint(error);
       process.exit(1);
     }
-    client.getAccounts(
-      tokenResponse.access_token,
-      async (error, { accounts, item }) => {
+    client.getAccounts(tokenResponse.access_token, async (error, res) => {
+      if (error != null) {
+        prettyPrint(error);
+        process.exit(1);
+      }
+      client.getInstitutionById(res.item.institution_id, (error, res) => {
         if (error != null) {
           prettyPrint(error);
           process.exit(1);
         }
-        client.getInstitutionById(
-          item.institution_id,
-          (error, { institution }) => {
-            if (error != null) {
-              prettyPrint(error);
-              process.exit(1);
-            }
-            accounts.forEach((account) => {
-              config.set(`plaidAccounts.${account.account_id}`, {
-                account,
-                plaidToken: tokenResponse.access_token,
-                plaidItemId: tokenResponse.item_id,
-                plaidBankName: institution.name,
-              });
-            });
-            reply.send({ ok: true });
-          }
-        );
-      }
-    );
+        res.accounts.forEach((account) => {
+          config.set(`plaidAccounts.${account.account_id}`, {
+            account,
+            plaidToken: tokenResponse.access_token,
+            plaidItemId: tokenResponse.item_id,
+            plaidBankName: res.institution.name,
+          });
+        });
+        reply.send({ ok: true });
+      });
+    });
   });
 });
