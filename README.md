@@ -2,6 +2,8 @@
 
 ## Setup
 
+NOTE: The default PLAID_ENV is `development` if you're using a sandbox for testing purposes, please set an the env variable `PLAID_ENV` to `sandbox`. Read more on the [Plaid doc site](https://dashboard.plaid.com/overview/sandbox)
+
 - `yarn global add actualplaid-cli` or `npm install -g actualplaid-cli`
 - Create [plaid developer account](https://dashboard.plaid.com/overview/development) and collect client id/secret keys
 - Open Actual Budget desktop app
