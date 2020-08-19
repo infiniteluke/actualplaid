@@ -31,3 +31,18 @@ NOTE: The default PLAID_ENV is `development` if you're using a sandbox for testi
 	Examples
 	  $ actualplaid import --account="My Checking" --since="2020-05-28"
 ```
+
+## Environment Variables
+
+| Variable            | Required | Default      | Example                           | Needed by                                                                    |
+|---------------------|----------|--------------|-----------------------------------|------------------------------------------------------------------------------|
+| ACTUAL_BUDGET_ID    | true     | ---          | My-Finances-12345                 | [Actual Budget API](https://actualbudget.com/docs/developers/using-the-API/) |
+| APP_PORT            | false    | 3000         | 3000                              | Plaid Linking                                                                |
+| PLAID_CLIENT_ID     | true     | ---          | 5817346120sd7bfd1691vfh7          | [Plaid](https://plaid.com/docs/#create-link-token)                           |
+| PLAID_SECRET        | true     | ---          | 5817346120sd7bfd1691vfh7          | [Plaid](https://plaid.com/docs/#create-link-token)                           |
+| PLAID_ENV           | false    | development  | sandbox                           | [Plaid](https://plaid.com/docs/#create-link-token)                           |
+| PLAID_PRODUCTS      | false    | transactions | transactions,auth,identity,income | [Plaid](https://plaid.com/docs/#create-link-token)                           |
+| PLAID_COUNTRY_CODES | false    | US           | US,CA,IR                          | [Plaid](https://plaid.com/docs/#create-link-token)                           |
+
+
+
