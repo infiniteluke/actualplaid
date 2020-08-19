@@ -16,30 +16,30 @@ NOTE: The default PLAID_ENV is `development` if you're using a sandbox for testi
 ## Commands
 
 ```
-	Usage
-	  $ actualplaid <command> <flags>
+  Usage
+    $ actualplaid <command> <flags>
 
-	Commands & Options
+  Commands & Options
     setup            Link bank accounts with your Actual Budget accounts via Plai
     ls               List currently syncing accounts
     import           Sync bank accounts to Actual Budget
-	    --account, -a   The account to import, ex: --account="My Checking"
-	    --since, -s     The start date after which transactions should be imported. Defaults to beginning of current month, format: yyyy-MM-dd, ex: --since=2020-05-28
+      --account, -a   The account to import, ex: --account="My Checking"
+      --since, -s     The start date after which transactions should be imported. Defaults to beginning of current month, format: yyyy-MM-dd, ex: --since=2020-05-28
     config           Print the location of actualplaid the config file
     --version        Print the version of actualplaid being used
 
-	Examples
-	  $ actualplaid import --account="My Checking" --since="2020-05-28"
+  Examples
+    $ actualplaid import --account="My Checking" --since="2020-05-28"
 ```
 
 ## Environment Variables
 
 | Variable            | Required | Default      | Example                           | Needed by                                                                    |
-|---------------------|----------|--------------|-----------------------------------|------------------------------------------------------------------------------|
+| ------------------- | -------- | ------------ | --------------------------------- | ---------------------------------------------------------------------------- |
 | ACTUAL_BUDGET_ID    | true     | ---          | My-Finances-12345                 | [Actual Budget API](https://actualbudget.com/docs/developers/using-the-API/) |
 | APP_PORT            | false    | 3000         | 3000                              | Plaid Linking                                                                |
 | PLAID_CLIENT_ID     | true     | ---          | 5817346120sd7bfd1691vfh7          | [Plaid](https://plaid.com/docs/#create-link-token)                           |
 | PLAID_SECRET        | true     | ---          | 8f5cd6729h0v5d247vc190ddcs4l2a    | [Plaid](https://plaid.com/docs/#create-link-token)                           |
 | PLAID_ENV           | false    | development  | sandbox                           | [Plaid](https://plaid.com/docs/#create-link-token)                           |
 | PLAID_PRODUCTS      | false    | transactions | transactions,auth,identity,income | [Plaid](https://plaid.com/docs/#create-link-token)                           |
-| PLAID_COUNTRY_CODES | false    | US           | US,CA,IR                          | [Plaid](https://plaid.com/docs/#create-link-token)                           |                        |
+| PLAID_COUNTRY_CODES | false    | US           | US,CA,IR                          | [Plaid](https://plaid.com/docs/#create-link-token)                           |  |
